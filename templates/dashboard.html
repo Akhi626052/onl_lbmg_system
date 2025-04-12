@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library Admin Dashboard</title>
+    <style>
+        body { 
+        display: flex
+        font-family: Arial; 
+        padding: 20px; 
+        background: #f8f8f8;
+        }
+        h1 { color: #333; }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background: gray;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            width: 180px;
+            text-align: center;
+        }
+        .btn:hover { background: black; }
+    </style>
+</head>
+<body>
+
+    <h1>Library Admin Dashboard</h1>
+    <a href="{% url 'export_excel' %}" class="btn">Export All Data to Excel</a><br>
+    <a href="/admin/onl_lbmg_systemapp/author/" class="btn">Manage Authors</a>
+    <a href="/admin/onl_lbmg_systemapp/book/" class="btn">Manage Books</a>
+    <a href="/admin/onl_lbmg_systemapp/borrowrecord/" class="btn">Manage Borrow Records</a>
+
+
+
+<h1>Library Dashboard</h1>
+
+  <a href="{% url 'author_list' %}" class="btn">
+    Manage Authors List
+  </a>
+
+  <a href="{% url 'book_list' %}" class="btn">
+      Manage Books List
+  </a>
+
+  <a href="{% url 'borrow_record_list' %}" class="btn">
+    Manage Borrow Records List
+  </a>
+
+
+
+
+</body>
+</html>

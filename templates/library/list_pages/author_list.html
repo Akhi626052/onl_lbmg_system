@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Authors</title>
+    <style>
+        body { font-family: Arial; background: #f4f4f4; padding: 20px; }
+        .card { 
+
+             background: white; 
+             padding: 20px; 
+             margin-bottom: 10px; 
+             border-radius: 10px; 
+             height: 180px;
+             box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .pagination { 
+            margin-top: 20px;
+             }
+        .pagination a { 
+            color: #337ab7;
+            margin: 0 5px;
+            text-decoration: none; 
+            padding: 5px 10px; 
+            background: #007bff; 
+            color: white; 
+            border-radius: 5px; 
+           }
+        .pagination {
+             margin-top: 20px;
+             display: flex;
+             gap: 10px;
+             align-items: center;
+        }
+.pagination a,
+.pagination span {
+    padding: 8px 16px;
+    background-color: gray; /* Blue color */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+}
+.pagination span.disabled {
+    pointer-events: none; /* Disable click */
+}
+
+
+
+
+    </style>
+</head>
+<body>
+    <h2>Author List</h2>
+
+    {% for author in page_obj %}
+        <div class="card">
+
+            <h3>{{ author.name }}</h3>
+            <p><strong>Email:</strong> {{ author.email }}</p>
+            <p><strong>Bio:</strong> {{ author.bio }}</p>
+
+        </div>
+    {% empty %}
+        <p>No authors found.</p>
+    {% endfor %}
+
+
+
+<div class="pagination">
+    <!-- Previous button -->
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    {% else %}
+        <span class="disabled">Previous</span>
+    {% endif %}
+
+    <!-- Current Page Number -->
+    <span>{{ page_obj.number }}</span>
+
+    <!-- Next button -->
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+    {% else %}
+        <span class="disabled">Next</span>
+    {% endif %}
+</div>
+
+
+
+</body>
+</html>
