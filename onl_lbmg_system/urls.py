@@ -5,11 +5,13 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     #path('onlinedm/', views.onlinedm, name='onlinedm'),
-    #list 
+    #list
     path('authors/', views.author_list, name='author_list'),
     path('books/', views.book_list, name='book_list'),
     path('borrow-records/', views.borrow_record_list, name='borrow_record_list'),
-    
+
     path('export-excel/', views.export_to_excel, name='export_excel'),
-    path('', views.dashboard_view, name='dashboard'),
+    path('dashboard/', views.dashboard_view, name='dashboard'),
+    path('', views.dashboard_public, name='dashboard_public'),
+    path('logout/', views.custom_logout, name='custom_logout'),
 ]

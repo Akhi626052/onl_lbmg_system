@@ -3,14 +3,36 @@
 <html>
 <head>
     <title>Library Admin Dashboard</title>
+    <script>
+
+
+  function showPopup() {
+    document.getElementById("popup").style.display = "flex";
+  }
+
+  function closePopup() {
+    document.getElementById("popup").style.display = "none";
+  }
+
+
+</script>
     <style>
         body { 
         display: flex
         font-family: Arial; 
-        padding: 20px; 
         background: #f8f8f8;
+        background-image: url("{% static 'images/library_img1.jpeg' %}");
+        margin: 0px;
+        padding-top: 0px;
+        background-repeat: no-repeat;
+        background-size: cover;
         }
-        h1 { color: #333; }
+        h1 { background-color: #2874a6;
+        padding-top: 0px;
+        margin-top: 0px;
+        padding: 20px;
+        text-align: center;
+        color: white; }
         .btn {
             display: inline-block;
             padding: 10px 20px;
@@ -22,33 +44,97 @@
             text-decoration: none;
             width: 180px;
             text-align: center;
+            border: 2px solid white;
         }
         .btn:hover { background: black; }
+
+        /* popup style css */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 90%;
+  font-family: 'Segoe UI', sans-serif;
+  position: relative;
+}
+#lbtx{
+   margin-top: 90px;
+}
+
+
     </style>
 </head>
 <body>
 
     <h1>Library Admin Dashboard</h1>
+<!-- Visible to All Users -->
     <a href="{% url 'export_excel' %}" class="btn">Export All Data to Excel</a><br>
-    <a href="/admin/onl_lbmg_systemapp/author/" class="btn">Manage Authors</a>
-    <a href="/admin/onl_lbmg_systemapp/book/" class="btn">Manage Books</a>
-    <a href="/admin/onl_lbmg_systemapp/borrowrecord/" class="btn">Manage Borrow Records</a>
+
+    <!-- Admin-only feature buttons (but visible to all) -->
+    <a href="{% if request.user.is_staff %}/admin/onl_lbmg_systemapp/author/{% else %}#{% endif %}" 
+       class="btn" onclick="{% if not request.user.is_staff %}showPopup(); return false;{% endif %}">
+       Manage Authors
+    </a>
+
+    <a href="{% if request.user.is_staff %}/admin/onl_lbmg_systemapp/book/{% else %}#{% endif %}" 
+       class="btn" onclick="{% if not request.user.is_staff %}showPopup(); return false;{% endif %}">
+       Manage Books
+    </a>
+
+    <a href="{% if request.user.is_staff %}/admin/onl_lbmg_systemapp/borrowrecord/{% else %}#{% endif %}" 
+       class="btn" onclick="{% if not request.user.is_staff %}showPopup(); return false;{% endif %}">
+       Manage Borrow Records
+    </a>
+
+    <!-- User-only list view -->
+    {% if not request.user.is_staff %}
+
+    <h1 id="lbtx" >Library Dashboard</h1>
+    <a href="{% url 'author_list' %}" class="btn">Manage Authors List</a>
+    <a href="{% url 'book_list' %}" class="btn">Manage Books List</a>
+    <a href="{% url 'borrow_record_list' %}" class="btn">Manage Borrow Records List</a>
+    {% endif %}
+    
+<!--
+<div id="toast" style="display: none; position: fixed; top: 20px; right: 20px; background: red; color: white; padding: 12px 20px; border-radius: 5px;">
+  Only admin can access this feature.
+</div> -->
+<!-- Popup Modal Structure -->
+<div id="popup" class="modal">
+  <div class="modal-content">
+    <p>Only admin can access this feature.</p>
+    <button onclick="closePopup()" class="btn">OK</button>
+  </div>
+</div>
 
 
 
-<h1>Library Dashboard</h1>
-
-  <a href="{% url 'author_list' %}" class="btn">
-    Manage Authors List
-  </a>
-
-  <a href="{% url 'book_list' %}" class="btn">
-      Manage Books List
-  </a>
-
-  <a href="{% url 'borrow_record_list' %}" class="btn">
-    Manage Borrow Records List
-  </a>
+<div style="position: absolute; top: 10px; right: 10px;">
+    {% if request.user.is_authenticated %}
+    <!-- admin:logout -->
+        <form method="POST" action="{% url 'custom_logout' %}" style="display:inline;">
+        
+            {% csrf_token %}
+            <button type="submit" class="btn" style="background: #c0392b;">Logout ({{ request.user.username }})</button>
+        </form>
+    {% else %}
+        <a href="{% url 'admin:login' %}" class="btn">Admin Login</a>
+    {% endif %}
+</div>
 
 
 

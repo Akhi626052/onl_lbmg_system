@@ -3,18 +3,29 @@ from onl_lbmg_systemapp.forms import AuthorForm, BookForm, BorrowRecordForm
 #pagination
 from onl_lbmg_systemapp.models import Author, Book, BorrowRecord
 from django.core.paginator import Paginator
-from io import BytesIO
+
 #admin access decorator
 from django.contrib.auth.decorators import login_required, user_passes_test
+#excel file dependenci
 import pandas as pd
+from io import BytesIO
 from django.http import HttpResponse
+#logout
+from django.contrib.auth import logout
 def is_admin(user):
-    return user.is_staff
+    return user.is_staff#built-in property
 @login_required
 @user_passes_test(is_admin)
 def dashboard_view(request):
     return render(request, 'dashboard.html')
 
+def custom_logout(request):
+    logout(request)
+    return redirect('dashboard')
+
+#deshboard publish
+def dashboard_public(request):
+    return render(request, 'dashboard.html')
 
 # pagination
 def author_list(request):
@@ -41,11 +52,11 @@ def borrow_record_list(request):
 
 #excel-Emport
 def export_to_excel(request):
-    # Step 1: Authors data
+    # Authors data
     authors = Author.objects.all().values('id', 'name', 'email', 'bio')
     df_authors = pd.DataFrame(authors)
-
-    # Step 2: Books data (related author name included)
+    
+    #Books data Fetch (related author name included)
     books = Book.objects.select_related('author').all()
     df_books = pd.DataFrame([{
         'id': book.id,
@@ -55,7 +66,7 @@ def export_to_excel(request):
         'author': book.author.name
     } for book in books])
 
-    # Step 3: Borrow Records (related book title included)
+    # Borrow Records (related book title included)
     records = BorrowRecord.objects.select_related('book').all()
     df_borrow = pd.DataFrame([{
         'id': record.id,
@@ -65,14 +76,14 @@ def export_to_excel(request):
         'return_date': record.return_date
     } for record in records])
 
-    # Step 4: Create Excel using BytesIO
-    output = BytesIO()
+    # Create Excel using BytesIO
+    output = BytesIO() # temporary file
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
         df_authors.to_excel(writer, sheet_name='Authors', index=False)
         df_books.to_excel(writer, sheet_name='Books', index=False)
         df_borrow.to_excel(writer, sheet_name='BorrowRecords', index=False)
 
-    # Step 5: Return Excel file in response
+    # Return Excel file in response
     output.seek(0)
     response = HttpResponse(
         output,
@@ -80,7 +91,6 @@ def export_to_excel(request):
     )
     response['Content-Disposition'] = 'attachment; filename=library_data.xlsx'
     return response
-
 
 
 
