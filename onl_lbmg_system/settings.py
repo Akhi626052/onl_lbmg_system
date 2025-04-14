@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-p_wh!be!u2aejry*r!)&aukg+_u_s50-w-p#b&64-2_1r-6f7b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['infodvakhilesh.pythonanywhere.com']
 
 
 # Application definition
@@ -124,3 +124,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/admin/login/' 
 # After login, admin panel redirect kare:
 LOGIN_REDIRECT_URL = '/admin/'
+#hosting required
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
