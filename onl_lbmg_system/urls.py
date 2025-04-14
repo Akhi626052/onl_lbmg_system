@@ -14,4 +14,9 @@ urlpatterns = [
     path('dashboard/', views.dashboard_view, name='dashboard'),
     path('', views.dashboard_public, name='dashboard_public'),
     path('logout/', views.custom_logout, name='custom_logout'),
+    #all logout redirect deshboard
+    path('admin/logout/', views.custom_logout),  #override default admin logout
+    
+    
+    
 ]

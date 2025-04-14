@@ -22,6 +22,8 @@ def dashboard_view(request):
 def custom_logout(request):
     logout(request)
     return redirect('dashboard')
+# logout ke vad deshboard pe render ho gaye ga na ki login page  pe nahi jaye ga 
+
 
 #deshboard publish
 def dashboard_public(request):
